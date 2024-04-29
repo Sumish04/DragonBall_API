@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="CSS/Superhero-min.css" rel="stylesheet">
+    <link href="CSS/Superhero.css" rel="stylesheet">
+    <link href="CSS/Main.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>Planets</title>
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+    <a href="javascript:window.open('','_self').close();" type="button" class="btn btn-primary m-4 dbz-text" style="color: black; font-size: 25pt;">
+        <img src="/Images/4StarDragonBall.png" width="30vw"> Back</a>
+
+    <div class="row m-4" id="planetList">
+          
+    </div>
+    
+    <script src="Scripts/main.js"></script>
+</body>
+</html>
+
+<script>
+    $(document).ready()
+    {
+        getPlanets();
+    }
+
+    function getPlanets()
+    {
+        
+        var settings = {
+            "url": `https://dragonball-api.com/api/planets?limit=20`,
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+            },
+        };
+
+        $.ajax(settings).done(function (response)
+        {  
+            var planets = "";
+
+            response.items.forEach(function(item, index)
+            {
+                planets += `
+                <div class="col-3 mt-2">
+                <div class="card text-center">
+                    <div class="card-header">
+                    <h1>${item.name}</h1>
+                    </div>
+                    <div class="card-body image-container">
+                    <h5 class="card-title">Destroyed : ${item.isDestroyed ? "Yes" : "No"}</h5>
+                    <img src="${item.image}" height="400vh"></img>
+                    </div>
+                </div>
+                </div>`;
+            })
+            $("#planetList").html(planets);
+        });
+    }
+
+</script>

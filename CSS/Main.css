@@ -34,3 +34,7 @@
 .DBBG  {
     background-image: url("/Images/DBBG.png");
   }
+
+  .dropdown{
+    border-radius: 4px !important;
+  }

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="CSS/Superhero-min.css" rel="stylesheet">
+    <link href="CSS/Superhero.css" rel="stylesheet">
+    <link href="CSS/Main.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>Kami's Lookout</title>
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+    <a href="javascript:window.open('','_self').close();" type="button" class="btn btn-primary m-4 dbz-text" style="color: black; font-size: 25pt;">
+        <img src="/Images/4StarDragonBall.png" width="30vw"> Back</a>
+
+        <div class="row m-2">
+            <div class="col-2">
+                <select class="form-select dropdown" id="characterSelect" onchange="getTransformations(1)">
+
+                </select>
+            </div>
+            <div class="col-2">
+                <select class="form-select dropdown" id="transformationSelect" onchange="viewTransformation(1)" disabled>
+
+                </select>
+            </div>
+
+            <div class="col-4" style="text-align: -webkit-center;">
+                
+            </div>
+
+            <div class="col-2">
+                <select class="form-select dropdown" id="characterSelect2" onchange="getTransformations(2)">
+
+                </select>
+            </div>
+            <div class="col-2">
+                <select class="form-select dropdown" id="transformationSelect2" onchange="viewTransformation(2)" disabled>
+
+                </select>
+            </div>
+        </div>
+
+        <div class="row m-2">
+            <div class="col-4" id="firstCharacter">
+            </div>
+            <div class="col-4" style="text-align: -webkit-center;">
+                <img src="Images/Versus.png" width="450vw">
+            </div>
+            <div class="col-4" id="secondCharacter">
+            </div>
+        </div>
+        
+
+
+        
+
+    
+    <script src="Scripts/main.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script> -->
+</body>
+</html>
+
+<script>
+
+$(document).ready()
+{
+    getCharacterList();
+}
+
+
+function getCharacterList()
+{
+    var characters = "<option value='0'>Select Character</option>";
+    var settings = {
+            "url": `https://dragonball-api.com/api/characters?limit=100`,
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+            },
+        };
+
+        $.ajax(settings).done(function (response)
+        {  
+            response.items.forEach(function(item, index)
+            {
+                characters += `<option value="${item.id}">${item.name}</option>`;
+            })
+            document.getElementById("characterSelect").innerHTML = characters;
+            document.getElementById("characterSelect2").innerHTML = characters;
+        });
+}
+
+function getTransformations(type)
+{
+    var select = type == 1 ? 'transformationSelect' : 'transformationSelect2';
+    var id = type == 1 ? $("#characterSelect").find(":selected").val() : $("#characterSelect2").find(":selected").val() 
+    var transformations = "<option value='0'>Select Transformation</option>";
+    $(`#${select}`).html(transformations);
+    var firstCharacter = "";
+    var secondCharacter = "";
+
+    var settings = {
+            "url": `https://dragonball-api.com/api/characters/${id}`,
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+            },
+        };
+
+        $.ajax(settings).done(function (response)
+        {  
+            if(response.transformations.length > 1)
+            {
+                response.transformations.forEach(function(item, index)
+                {
+                    transformations += `<option value="${item.id}">${item.name}</option>`;
+                })
+                $(`#${select}`).prop("disabled", false)
+                document.getElementById(`${select}`).innerHTML = transformations;
+            }
+            else
+            {
+                $(`#${select}`).prop("disabled", true)
+                if(type == 1)
+                {
+                    firstCharacter = `<div class="mt-2">
+                    <div class="card text-center DBBG">
+                        <div class="card-header">
+                        <h1>${response.name}</h1>
+                        </div>
+                        <div class="card-body image-container">
+                        <h5 class="card-title">ki : ${response.ki}</h5>
+                        <img src="${response.image}" height="400vh"></img>
+                        </div>
+                    </div>
+                    </div>`;
+                    $("#firstCharacter").html(firstCharacter)
+                }
+            }
+            
+        }); 
+}
+
+function viewTransformation(type)
+{
+    var view = "";
+    
+    var characterID = type == 1 ? $("#characterSelect").find(":selected").val(): $("#characterSelect2").find(":selected").val();
+    var transformationID = type == 1 ? $("#transformationSelect").find(":selected").val(): $("#transformationSelect2").find(":selected").val()
+    var settings = {
+            "url": `https://dragonball-api.com/api/characters/${characterID}`,
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+            },
+        };
+
+        $.ajax(settings).done(function (response)
+        {  
+            var transform = response.transformations.filter(x=>x.id == transformationID)
+            view = `<div class="mt-2">
+                    <div class="card text-center DBBG">
+                        <div class="card-header">
+                        <h1>${transform[0].name}</h1>
+                        </div>
+                        <div class="card-body image-container">
+                        <h5 class="card-title">ki : ${transform[0].ki}</h5>
+                        <img src="${transform[0].image}" height="400vh"></img>
+                        </div>
+                    </div>
+                    </div>`;
+                    type == 1 ? $("#firstCharacter").html(view) : $("#secondCharacter").html(view);
+        });
+}
+</script>
