@@ -17,3 +17,20 @@
 {
     color: rgb(190, 178, 178) !important;
 }
+
+.image-container {
+    overflow: hidden;
+    position: relative;
+}
+
+.image-container img {
+    transition: transform 0.3s ease !important;
+}
+
+.image-container:hover img {
+    transform: scale(1.1) !important; 
+}
+
+.DBBG  {
+    background-image: url("/Images/DBBG.png");
+  }

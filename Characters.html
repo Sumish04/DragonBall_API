@@ -11,13 +11,17 @@
     
 </head>
 <body>
-  <div id="navbar-placeholder"></div>
-    
-      <div class="characterList">
+  <div id="navbar-placeholder">
 
+  </div>
+
+  <a href="Index.html" type="button" class="btn btn-primary m-4 dbz-text" style="color: black; font-size: 25pt;">
+  <img src="/Images/4StarDragonBall.png" width="30vw"> Back</a>
+    
+      <div class="row m-4" id="characterList">
+          
       </div>
-      
-      </div>
+
       <script src="Scripts/main.js"></script>
 </body>
 </html>
@@ -25,13 +29,12 @@
 <script>
 $(document).ready()
 {
+    var apiLink = "https://dragonball-api.com/api/characters?limit=8&page=1";
     getAllCharacters();
 }
 
 function getAllCharacters()
 {
-    var apiLink = "https://dragonball-api.com/api/characters?limit=5&page=1";
-
     var characterList;
 
     var settings = {
@@ -44,12 +47,38 @@ function getAllCharacters()
 
         $.ajax(settings).done(function (response)
         {
+            var characters = "";
+
             response.items.forEach(function(item, index)
-        {
-            
-        })
+            {
+                characters += `
+                <div class="col-3 mt-2">
+                  <div class="card text-center DBBG">
+                    <div class="card-header">
+                      <h1>${item.name}</h1>
+                    </div>
+                    <div class="card-body image-container">
+                      <h5 class="card-title">${item.affiliation}</h5>
+                      <img src="${item.image}" height="400vh"></img>
+                    </div>
+                    <div class="card-footer text-muted">
+                      <a href="Transformations.html?id=${item.id}" target="_blank" class="btn btn-primary">View Transformations</a>
+                    </div>
+                  </div>
+                </div>`;
+            })
+            $("#characterList").append(characters);
             apiLink = response.links.next;
         });
-     
 }
+
+$(function(){
+   $(window).scroll(function()
+   {
+       if($(document).height()==$(window).scrollTop()+$(window).height())
+       {
+          getAllCharacters();
+       }
+   });
+});
 </script>
