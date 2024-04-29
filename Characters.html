@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="CSS/Superhero-min.css" rel="stylesheet">
+    <link href="CSS/Superhero.css" rel="stylesheet">
+    <link href="CSS/Main.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>Characters</title>
+    
+</head>
+<body>
+  <div id="navbar-placeholder"></div>
+    
+      <div class="characterList">
+
+      </div>
+      
+      </div>
+      <script src="Scripts/main.js"></script>
+</body>
+</html>
+
+<script>
+$(document).ready()
+{
+    getAllCharacters();
+}
+
+function getAllCharacters()
+{
+    var apiLink = "https://dragonball-api.com/api/characters?limit=5&page=1";
+
+    var characterList;
+
+    var settings = {
+            "url": `${apiLink}`,
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+            },
+        };
+
+        $.ajax(settings).done(function (response)
+        {
+            response.items.forEach(function(item, index)
+        {
+            
+        })
+            apiLink = response.links.next;
+        });
+     
+}
+</script>

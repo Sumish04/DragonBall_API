@@ -1,0 +1,19 @@
+/* Define @font-face rule with a relative path */
+@font-face {
+    font-family: 'DBZFont';
+    src: url('../Fonts/Saiyan-Sans.ttf') format('truetype'); /* Adjust the path relative to your CSS file */
+}
+/* Use the DBZ font in your CSS styles */
+.dbz-text {
+    font-family: 'DBZFont', sans-serif; /* Use the DBZ font, fallback to a generic sans-serif font */
+}
+
+.heading-text
+{
+    font-size: 80px !important; 
+}
+
+.heading-text :hover
+{
+    color: rgb(190, 178, 178) !important;
+}
